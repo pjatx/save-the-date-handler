@@ -75,10 +75,13 @@ async function sendEmail(submission) {
     redirect: 'follow',
   }
 
-  const response = await fetch(url, requestOptions)
-  const rj = await response.json()
-
-  return rj
+  try {
+    const response = await fetch(url, requestOptions)
+    const rj = await response.text
+    return rj
+  } catch (e) {
+    console.log(JSON.stringify(e))
+  }
 }
 
 async function createGuest(submission) {
@@ -202,15 +205,14 @@ async function handleRequest(request) {
 
   const submission = await request.json()
 
-  const emailResult = await sendEmail(submission)
-  // console.log(JSON.stringify(emailResult))
-
   console.log(JSON.stringify(submission))
+
+  // console.log(JSON.stringify(emailResult))
 
   // Root Path Logic
   if (path == '/') {
     // console.log(JSON.stringify(request))
-
+    await sendEmail(submission)
     // console.log(JSON.stringify(newAddress))
     const guests = await findGuest(submission)
 
