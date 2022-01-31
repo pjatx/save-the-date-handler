@@ -28,7 +28,7 @@ async function findGuest(submission) {
   const response = await fetch(url, requestOptions)
   const rj = await response.json()
   const records = rj.records
-  console.log(JSON.stringify(rj))
+  // console.log(JSON.stringify(rj))
   return records
 }
 
@@ -141,7 +141,7 @@ async function createAddress(submission) {
     ],
   }
 
-  console.log(data)
+  // console.log(data)
 
   const url = 'https://api.airtable.com/v0/appiPHOcdGktaFlGE/Mailing%20Address'
 
@@ -178,7 +178,7 @@ async function updateRSVP(records, newAddress, submission) {
     records: recordsUpdate,
   }
 
-  console.log(JSON.stringify(data))
+  // console.log(JSON.stringify(data))
 
   const url = 'https://api.airtable.com/v0/appiPHOcdGktaFlGE/Guests'
 
@@ -194,7 +194,7 @@ async function updateRSVP(records, newAddress, submission) {
   }
   const response = await fetch(url, requestOptions)
   const rj = await response.json()
-  console.log(JSON.stringify(rj))
+  // console.log(JSON.stringify(rj))
   return rj
 }
 
@@ -221,8 +221,6 @@ async function handleRequest(request) {
     await sendEmail(submission)
     // console.log(JSON.stringify(newAddress))
     const guests = await findGuest(submission)
-
-    console.log(guests.length)
 
     if (guests.length < 1) {
       console.log('Guest not found. Creating new guest')
