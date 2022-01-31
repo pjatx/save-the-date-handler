@@ -28,7 +28,7 @@ async function findGuest(submission) {
   const response = await fetch(url, requestOptions)
   const rj = await response.json()
   const records = rj.records
-  // console.log(JSON.stringify(rj))
+  console.log(JSON.stringify(rj))
   return records
 }
 
@@ -114,7 +114,7 @@ async function createGuest(submission) {
   const response = await fetch(url, requestOptions)
   const rj = await response.json()
   const records = rj.records
-  console.log(JSON.stringify(rj))
+  // console.log(JSON.stringify(rj))
   return records
 }
 
@@ -141,6 +141,8 @@ async function createAddress(submission) {
     ],
   }
 
+  console.log(data)
+
   const url = 'https://api.airtable.com/v0/appiPHOcdGktaFlGE/Mailing%20Address'
 
   let headers = new Headers()
@@ -155,6 +157,7 @@ async function createAddress(submission) {
   }
   const response = await fetch(url, requestOptions)
   const rj = await response.json()
+  // print(JSON.stringify(rj))
   const recordIds = rj.records.map(record => record.id)
   // console.log(JSON.stringify(recordIds))
   return recordIds
@@ -175,6 +178,8 @@ async function updateRSVP(records, newAddress, submission) {
     records: recordsUpdate,
   }
 
+  console.log(JSON.stringify(data))
+
   const url = 'https://api.airtable.com/v0/appiPHOcdGktaFlGE/Guests'
 
   let headers = new Headers()
@@ -189,6 +194,7 @@ async function updateRSVP(records, newAddress, submission) {
   }
   const response = await fetch(url, requestOptions)
   const rj = await response.json()
+  console.log(JSON.stringify(rj))
   return rj
 }
 
@@ -216,12 +222,16 @@ async function handleRequest(request) {
     // console.log(JSON.stringify(newAddress))
     const guests = await findGuest(submission)
 
+    console.log(guests.length)
+
     if (guests.length < 1) {
+      console.log('Guest not found. Creating new guest')
       const newGuest = await createGuest(submission)
       const newAddress = await createAddress(submission)
-      console.log(JSON.stringify(newGuest), JSON.stringify(newAddress))
+      // console.log(JSON.stringify(newGuest), JSON.stringify(newAddress))
       const updates = await updateRSVP(newGuest, newAddress, submission)
     } else {
+      console.log('Found existing guest')
       const newAddress = await createAddress(submission)
       const updates = await updateRSVP(guests, newAddress, submission)
     }
